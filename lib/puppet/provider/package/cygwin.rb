@@ -2,7 +2,6 @@
 #
 require 'puppet/provider/package'
 require 'puppet/util/package'
-require 'win32/registry'
 
 Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Package) do
   desc 'Install a package via Cygwin'
@@ -25,6 +24,8 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # found then return nil.
   #
   def self.install_dir
+    require 'win32/registry'
+
     return @install_dir if @install_dir
 
     begin
