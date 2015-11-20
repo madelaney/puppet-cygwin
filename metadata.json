@@ -1,0 +1,41 @@
+{
+  "name": "madelaney-cygwin",
+  "version": "0.0.1",
+  "summary": "Cygwin Module",
+  "author": "Mike Delaney",
+  "description": "Puppet module to install and manage packages with cygwin.",
+  "types": [],
+  "checksums": {},
+  "source": "git://github.com/madelaney/puppet-cygwin",
+  "project_page": "http://github.com/madelaney/puppet-cygwin",
+  "license": "BSD-2-Clause",
+  "tags": [
+    "windows",
+    "cygwin"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.2.0"
+    },
+    {
+      "name": "nanliu/staging",
+      "version_requirement": ">=1.0.3"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Windows",
+      "operatingsystemrelease": [
+        "Server 2003",
+        "Server 2003 R2",
+        "Server 2008",
+        "Server 2008 R2",
+        "Server 2012",
+        "Server 2012 R2",
+        "7",
+        "8"
+      ]
+    }
+  ]
+}
