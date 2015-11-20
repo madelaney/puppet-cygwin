@@ -1,6 +1,6 @@
 {
   "name": "mdelaney-cygwin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "summary": "Cygwin Module",
   "author": "Mike Delaney",
   "description": "Puppet module to install and manage packages with cygwin.",
