@@ -6,6 +6,7 @@
   "description": "Puppet module to install and manage packages with cygwin.",
   "source": "git://github.com/madelaney/puppet-cygwin",
   "project_page": "http://github.com/madelaney/puppet-cygwin",
+  "issues_url": "https://github.com/madelaney/puppet-cygwin/issues",
   "license": "BSD-2-Clause",
   "tags": [
     "windows",
