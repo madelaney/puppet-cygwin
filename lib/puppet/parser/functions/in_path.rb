@@ -1,15 +1,6 @@
 require 'win32/registry'
 
-KEYS = [
-  {
-    HIVE: Win32::Registry::HKEY_CURRENT_USER,
-    PATH: 'Environment'
-  },
-  {
-    HIVE: Win32::Registry::HKEY_LOCAL_MACHINE,
-    PATH: 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
-  }
-]
+
 
 module Puppet::Parser::Functions
   newfunction(:in_path, :type => :rvalue, :doc => <<-EOS
@@ -19,12 +10,23 @@ module Puppet::Parser::Functions
     raise(Puppet::ParseError, "in_path(): Wrong number of arguments " +
       "given (#{args.size} for 1)") if args.size != 1
 
+    keys = [
+      {
+        :HIVE => Win32::Registry::HKEY_CURRENT_USER,
+        :PATH => 'Environment'
+      },
+      {
+        :HIVE => Win32::Registry::HKEY_LOCAL_MACHINE,
+        :PATH => 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
+      }
+    ]
+
     expected_path = args[0]
     reg_type = Win32::Registry::KEY_READ | 0x100
 
     found = false
 
-    KEYS.each do |entires|
+    keys.each do |entires|
       entires[:PATH].split(':').each do |path|
         Puppet.debug "Opening '#{path}'"
         entires[:HIVE].open(path, reg_type) do |reg|
