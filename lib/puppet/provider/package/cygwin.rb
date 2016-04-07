@@ -7,6 +7,12 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   desc 'Install a package via Cygwin'
   confine :operatingsystem => :windows
 
+  has_feature :versionable
+  has_feature :uninstallable
+  has_feature :installable
+  has_feature :install_options
+  has_feature :source
+
   attr_reader :install_dir
 
   self::REGISTRY_KEY = 'SOFTWARE\Cygwin\setup'
@@ -15,7 +21,8 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
     %r{Cygwin Package Information},
     %r{Package(\s+)Version}
   ]
-  self::REGEX = %r{^([\w\-]+)\s+([\d\w\.\-]+)}
+
+  self::REGEX = %r{^([\S]+)\s+(([\d\S\.]{2,})(\-([\d\.])+)?)$}
   self::FIELDS = [:name, :version]
 
   # install_dir
@@ -166,11 +173,12 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
       @resource[:name].nil?
 
     flags = ['-q', '-P', name]
+    unless @resource[:install_options].nil?
+      flags << @resource[:install_options]
+    end
 
-    source = @resource[:source] unless @resource[:source].nil?
-    unless source.nil?
-      flags << '-s'
-      flags << source
+    unless source = @resource[:source]
+      flags = flags.concat ['-s', source]
     end
 
     self.class.cygwin(flags)
