@@ -16,7 +16,11 @@
 # [*proxy*]
 #   The internet proxy settings to use when installing a package
 #
-define cygwin::package($ensure = 'present', $source = nil, $proxy = $::cygwin::proxy) {
+define cygwin::package(
+  $ensure = 'present',
+  $source = nil,
+  $proxy = $::cygwin::proxy
+) {
   # The base class must be included first because it is used by parameter defaults
   if ! defined(Class['cygwin']) {
     fail('You must include the Cygwin base class before using any packages')
