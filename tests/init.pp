@@ -1,1 +1,1 @@
-include puppet_cygwin
+include cygwin
