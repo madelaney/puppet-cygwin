@@ -7,6 +7,7 @@
 class cygwin::params {
   $host = 'http://cygwin.com/'
   $mirror = 'http://cygwin.mirror.constant.com'
+  $proxy = undef
 
   case $::hardwaremodel {
     'x64': {

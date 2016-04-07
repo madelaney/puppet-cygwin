@@ -15,34 +15,47 @@
 #   The host to set the Cygwin mirror to. This will default to where all
 #   future packages are installed from.
 #
+# [*proxy*]
+#   The HTTP proxy (host:port) settings to use when installing packages
+#
+#
 class cygwin::install(
-  $install_root = $cygwin::params::install_root,
-  $host = $cygwin::params::host,
-  $mirror = $cygwin::params::mirror,
+  $install_root = $cygwin::install_root,
+  $host         = $cygwin::host,
+  $mirror       = $cygwin::mirror,
+  $proxy        = $cygwin::proxy,
+  $installer    = $cygwin::installer
 ) inherits cygwin {
   file {
     $install_root:
       ensure => directory;
   }
 
-  $_final_url = "${host}/${cygwin::params::installer}"
+  $_final_url = "${host}/${installer}"
   staging::file {
-    $cygwin::params::installer:
+    $installer:
       source => $_final_url,
       notify => Exec['Install Cygwin'];
   }
 
   file {
-    "${::staging_windir}\\cygwin\\${cygwin::params::installer}":
+    "${::staging_windir}\\cygwin\\${installer}":
       mode    => '0755',
-      require => Staging::File[$cygwin::params::installer];
+      require => Staging::File[$installer];
   }
 
-  $_final_command_args = "-q -R ${install_root} -s ${mirror}"
+  if $proxy {
+    $proxy_args = "-p ${proxy}"
+  }
+  else {
+    $proxy_args = undef
+  }
+
+  $_final_command_args = "-q -R ${install_root} -s ${mirror} ${proxy_args}"
 
   exec {
     'Install Cygwin':
-      command     => "${cygwin::params::installer} ${_final_command_args}",
+      command     => "${installer} ${_final_command_args}",
       cwd         => "${::staging_windir}\\cygwin",
       path        => ["${::staging_windir}\\cygwin"],
       loglevel    => debug,
@@ -56,12 +69,8 @@ class cygwin::install(
   file {
     "${install_root}\\bin\\setup.exe":
       ensure  => file,
-      source  => "${::staging_windir}\\cygwin\\${cygwin::params::installer}",
+      source  => "${::staging_windir}\\cygwin\\${installer}",
       source_permissions => ignore,
       mode    => '0755';
-  }
-
-  if !in_path($install_root) {
-    debug("Cygwin install path '${install_root}' is not in the path")
   }
 }
