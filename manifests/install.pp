@@ -58,8 +58,7 @@ class cygwin::install(
       command     => "${installer} ${_final_command_args}",
       cwd         => "${::staging_windir}\\cygwin",
       path        => ["${::staging_windir}\\cygwin"],
-      loglevel    => debug,
-      refreshonly => false;
+      creates     => "${install_root}\\Cygwin.bat";
   }
 
   # NOTE (madelaney)
@@ -68,9 +67,9 @@ class cygwin::install(
   #
   file {
     "${install_root}\\bin\\setup.exe":
-      ensure  => file,
-      source  => "${::staging_windir}\\cygwin\\${installer}",
+      ensure             => file,
+      source             => "${::staging_windir}\\cygwin\\${installer}",
       source_permissions => ignore,
-      mode    => '0755';
+      mode               => '0755';
   }
 }
