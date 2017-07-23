@@ -146,6 +146,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
       self.class.cygcheck('-c', '-d', self.name).each_line do |line|
         line.strip!
         next if ignore_line? line
+
         hash = self.class.parse_cygcheck_line(line)
         @property_hash = hash unless hash.empty?
       end
