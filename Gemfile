@@ -3,6 +3,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.3', '< 4.0']
 gem 'puppet', puppetversion
 gem 'facter', '>= 1.7.0'
+gem 'safe_yaml'
 
 group :development, :unit_tests do
   gem 'metadata-json-lint'
