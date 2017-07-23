@@ -44,21 +44,17 @@ class cygwin::install(
       require => Staging::File[$installer];
   }
 
-  if $proxy {
-    $proxy_args = "-p ${proxy}"
+  $_final_command_args = $proxy ? {
+    undef   => "-q -R ${install_root} -s ${mirror}",
+    default => "-q -R ${install_root} -s ${mirror} -p ${proxy}",
   }
-  else {
-    $proxy_args = undef
-  }
-
-  $_final_command_args = "-q -R ${install_root} -s ${mirror} ${proxy_args}"
 
   exec {
     'Install Cygwin':
-      command     => "${installer} ${_final_command_args}",
-      cwd         => "${::staging_windir}\\cygwin",
-      path        => ["${::staging_windir}\\cygwin"],
-      creates     => "${install_root}\\Cygwin.bat";
+      command => "${installer} ${_final_command_args}",
+      cwd     => "${::staging_windir}\\cygwin",
+      path    => ["${::staging_windir}\\cygwin"],
+      creates => "${install_root}\\Cygwin.bat";
   }
 
   # NOTE (madelaney)

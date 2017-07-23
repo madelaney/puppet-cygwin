@@ -10,7 +10,7 @@ class cygwin::params {
   $proxy = undef
 
   case $::hardwaremodel {
-    'x64': {
+    'x64','x86_64': {
       $install_root = 'C:/Cygwin64'
       $installer = 'setup-x86_64.exe'
     }
