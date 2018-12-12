@@ -168,18 +168,17 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   end
 
   def install
-    source = nil
-
-    fail "You must provide the name of the package to install" if
-      @resource[:name].nil?
+    if @resource[:name].nil?
+      fail "You must provide the name of the package to install"
+    end
 
     flags = ['-q', '-P', name]
     unless @resource[:install_options].nil?
       flags << @resource[:install_options]
     end
 
-    unless source = @resource[:source]
-      flags = flags.concat ['-s', source]
+    unless @resource[:source].nil?
+      flags = flags.concat ['-s', @resource[:source]]
     end
 
     self.class.cygwin(flags)
