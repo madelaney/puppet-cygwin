@@ -11,7 +11,7 @@
 
 ##Overview
 
-This module installs Cygwin and adds Cygwin as a package provider in Puppet.   
+This module installs Cygwin and adds Cygwin as a package provider in Puppet.
 
 ##Module Description
 
@@ -38,6 +38,15 @@ include '::cygwin'
 ####Private Classes
 
 ###Parameters
+
+###Functions
+
+#### `cygwin::windows_path($cygwin_path)`
+
+Take a UNIX-style path used in Cygwin and convert it to a Windows path. For example:
+
+* `cygwin::windows_path('/etc/motd') == 'C:\Cygwin64\etc\motd`
+* `cygwin::windows_path('/cygrive/c/ProgramData') == 'C:\ProgramData`
 
 ##Limitations
 
