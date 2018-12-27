@@ -16,6 +16,7 @@ gem 'safe_yaml'
 group :development, :unit_tests do
   gem 'metadata-json-lint'
   gem 'puppet-lint', '>= 0.3.2'
+  gem 'pdk', '>= 1.8.0'
 
   gem 'rspec-core', '3.1.7',     :require => false
   gem 'puppetlabs_spec_helper',  :require => false
