@@ -1,6 +1,14 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.3', '< 4.0']
+
+# NOTE Needed for compat.
+#
+# Rake 11.0, removes the field last_comment. This breaks some Puppet rspec
+# behaviors so we'll pin the version to work around this.
+#
+gem 'rake', '< 11.0'
+
 gem 'puppet', puppetversion
 gem 'facter', '>= 1.7.0'
 gem 'safe_yaml'
