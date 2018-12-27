@@ -1,6 +1,6 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
-puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.3', '< 4.0']
+puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>=4.1.0', '<7.0.0']
 
 # NOTE Needed for compat.
 #
