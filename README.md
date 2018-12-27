@@ -1,6 +1,6 @@
-#Cygwin
+# Cygwin
 
-####Table of Contents
+#### Table of Contents
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
@@ -9,37 +9,37 @@
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
 
-##Overview
+## Overview
 
 This module installs Cygwin and adds Cygwin as a package provider in Puppet.
 
-##Module Description
+## Module Description
 
 This module will download the Cygwin setup executable and install it. This will install the standard set of cygwin tools to the standard cygwin location.
 
-##Usage
+## Usage
 
 If you want to use cygwin as a package provider, it must be installed first.
 
-###Install Cygwin
+### Install Cygwin
 
 ```puppet
 include '::cygwin'
 ```
 
-##Reference
+## Reference
 
-###Classes
+### Classes
 
-####Public Classes
+#### Public Classes
 
 * cygwin: Main Class, includes all other classes.
 
-####Private Classes
+#### Private Classes
 
-###Parameters
+### Parameters
 
-###Functions
+### Functions
 
 #### `cygwin::windows_path($cygwin_path)`
 
@@ -48,10 +48,10 @@ Take a UNIX-style path used in Cygwin and convert it to a Windows path. For exam
 * `cygwin::windows_path('/etc/motd') == 'C:\Cygwin64\etc\motd`
 * `cygwin::windows_path('/cygrive/c/ProgramData') == 'C:\ProgramData`
 
-##Limitations
+## Limitations
 
 For obvious reasons, this module will only work on the Windows operating system.
 
-##Development
+## Development
 
-Please see the Puppet guidelines for module contribution. http://projects.puppetlabs.com/projects/module-site/wiki/Module_contributing
+Please see the [Puppet guidelines for module contribution](https://puppet.com/docs/puppet/6.1/contributing.html).
