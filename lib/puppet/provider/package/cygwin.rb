@@ -31,18 +31,16 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # found then return nil.
   #
   def self.install_dir
-    require 'win32/registry'
-
     return @install_dir if @install_dir
+
+    require 'win32/registry'
 
     begin
       Win32::Registry::HKEY_LOCAL_MACHINE.open(self::REGISTRY_KEY) do |reg|
         @install_dir = reg['rootdir'].tr '/', '\\'
       end
-
     rescue StandardError => e
       Puppet.debug e
-
     end
   end
 

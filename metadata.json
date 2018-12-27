@@ -1,6 +1,6 @@
 {
   "name": "mdelaney-cygwin",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "summary": "Cygwin Module",
   "author": "Mike Delaney",
   "description": "Puppet module to install and manage packages with cygwin.",
@@ -32,8 +32,10 @@
         "Server 2008 R2",
         "Server 2012",
         "Server 2012 R2",
+        "Server 2016",
         "7",
-        "8"
+        "8",
+        "10"
       ]
     }
   ],
@@ -44,7 +46,7 @@
     },
     {
       "name": "puppet",
-      "version_requirement": ">=3.8.3 <4.0.0"
+      "version_requirement": ">=3.8.3 <7.0.0"
     }
   ]
 }
