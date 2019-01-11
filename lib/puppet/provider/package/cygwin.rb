@@ -13,6 +13,9 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   has_feature :install_options
   has_feature :source
 
+  # Used to ensure that cygwin is installed before trying to install packages
+  has_feature :cygwin
+
   attr_reader :install_dir
 
   self::REGISTRY_KEY = 'SOFTWARE\Cygwin\setup'
@@ -33,6 +36,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   def self.install_dir
     return @install_dir if @install_dir
 
+    require 'Win32API'
     require 'win32/registry'
 
     begin
@@ -41,6 +45,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
       end
     rescue StandardError => e
       Puppet.debug e
+      nil
     end
   end
 
@@ -50,6 +55,10 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # the output
   #
   def self.cygwin(*args)
+    if install_dir.nil?
+      raise Puppet::Error.new("Cygwin install dir not in registry. Cannot run setup.exe #{args}")
+    end
+
     cygwin_cmd = File.join install_dir, 'bin', 'setup.exe'
     cmd = [ cygwin_cmd ] + args
     Puppet::Util::Execution.execute(cmd)
@@ -61,6 +70,10 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # output
   #
   def self.cygcheck(*args)
+    if install_dir.nil?
+      raise Puppet::Error.new("Cygwin install dir not in registry. Cannot run cygcheck.exe #{args}")
+    end
+
     cygcheck_cmd = File.join install_dir, 'bin', 'cygcheck.exe'
     cmd = [ cygcheck_cmd ] + args
     Puppet::Util::Execution.execute(cmd)
@@ -105,6 +118,8 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # returns the installed packages.
   #
   def self.instances
+    return [] if install_dir.nil?
+
     packages = []
 
     cygcheck('-c', '-d').each_line do |line|
@@ -139,6 +154,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   #
   def query
     @property_hash = { :ensure => :absent }
+    return @property_hash if install_dir.nil?
 
     begin
       self.class.cygcheck('-c', '-d', self.name).each_line do |line|
