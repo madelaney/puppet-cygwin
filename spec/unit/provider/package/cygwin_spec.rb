@@ -26,7 +26,6 @@ describe provider_class do
   end
 
   before :each do
-    provider.expects(:execute).never
     resource.provider = provider
   end
 

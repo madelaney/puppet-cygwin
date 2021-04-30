@@ -16,21 +16,18 @@ describe 'cygwin::package', :type => :define do
   end
 
   describe 'simple setup' do
-    context "has necessary requirements" do
-      let :default_facts do
-        {
-          :caller_module_name => 'cygwin',
-          :osfamily => 'Windows',
-          :kernel   => 'Windows',
-          :is_pe    => false
-        }
+    on_supported_os.each do |os, os_facts|
+      context "on #{os} has necessary requirements" do
+        let :params do default_params end
+        let(:facts) do
+          os_facts.merge({
+            :caller_module_name => 'cygwin',
+            :is_pe              => false
+          })
+        end
+        it { is_expected.to contain_class('cygwin') }
+        it { is_expected.to contain_class('cygwin::params') }
       end
-
-      let :params do default_params end
-      let :facts do default_facts end
-
-      it { is_expected.to contain_class('cygwin') }
-      it { is_expected.to contain_class('cygwin::params') }
     end
   end
 end
