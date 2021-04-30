@@ -9,7 +9,7 @@ class cygwin::params {
   $mirror = 'http://cygwin.mirror.constant.com'
   $proxy = undef
 
-  case $::hardwaremodel {
+  case $facts['os']['hardware'] {
     'x64','x86_64': {
       $install_root = 'C:/Cygwin64'
       $installer = 'setup-x86_64.exe'

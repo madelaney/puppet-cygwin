@@ -10,7 +10,7 @@
 #
 # [*host*]
 #   The Cygwin host to download Cygwin setup binary from
-
+#
 # [*mirror*]
 #   The host to set the Cygwin mirror to. This will default to where all
 #   future packages are installed from.
@@ -18,8 +18,10 @@
 # [*proxy*]
 #   The HTTP proxy (host:port) settings to use when installing packages
 #
+# [*installer*]
+#   The name of the Cygwin intaller binary
 #
-class cygwin::install(
+class cygwin::install (
   $install_root = $cygwin::install_root,
   $host         = $cygwin::host,
   $mirror       = $cygwin::mirror,

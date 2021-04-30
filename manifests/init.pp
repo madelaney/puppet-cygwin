@@ -25,6 +25,9 @@
 # [*proxy*]
 #   The HTTP proxy (host:port) settings to use when installing packages
 #
+# [*installer*]
+#   The name of the Cygwin intaller binary
+#
 # [*packages*]
 #   Defines an array of packages to install after Cygwin is installed
 #
@@ -37,7 +40,6 @@ class cygwin (
   $installer    = $cygwin::params::installer,
   $packages     = {},
 ) inherits cygwin::params {
-
   if $enable {
     include cygwin::install
 
