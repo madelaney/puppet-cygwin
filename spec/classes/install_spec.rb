@@ -2,13 +2,12 @@
 
 require 'spec_helper'
 
-describe 'cygwin' do
+describe 'cygwin::install' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_class("cygwin::params") }
     end
   end
 end
