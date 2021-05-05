@@ -3,9 +3,9 @@
 require 'puppet/provider/package'
 require 'puppet/util/package'
 
-Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Package) do
+Puppet::Type.type(:package).provide :cygwin, parent: Puppet::Provider::Package do
   desc 'Install a package via Cygwin'
-  confine :operatingsystem => :windows
+  confine kernel: 'windows'
 
   has_feature :versionable
   has_feature :uninstallable
@@ -18,15 +18,15 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
 
   attr_reader :install_dir
 
-  self::REGISTRY_KEY = 'SOFTWARE\Cygwin\setup'
+  self::REGISTRY_KEY = 'SOFTWARE\Cygwin\setup'.freeze
 
   self::BAD_CYGCHECK_LINES = [
     %r{Cygwin Package Information},
-    %r{Package(\s+)Version}
-  ]
+    %r{Package(\s+)Version},
+  ].freeze
 
-  self::REGEX = %r{^([\S]+)\s+(([\d\S\.]{2,})(\-([\d\.])+)?)$}
-  self::FIELDS = [:name, :version]
+  self::REGEX = %r{^([\S]+)\s+(([\d\S\.]{2,})(\-([\d\.])+)?)$}.freeze
+  self::FIELDS = [:name, :version].freeze
 
   # install_dir
   #
@@ -56,7 +56,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   #
   def self.cygwin(*args)
     if install_dir.nil?
-      raise Puppet::Error.new("Cygwin install dir not in registry. Cannot run setup.exe #{args}")
+      raise Puppet::Error, "Cygwin install dir not in registry. Cannot run setup.exe #{args}"
     end
 
     cygwin_cmd = File.join install_dir, 'bin', 'setup.exe'
@@ -71,7 +71,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   #
   def self.cygcheck(*args)
     if install_dir.nil?
-      raise Puppet::Error.new("Cygwin install dir not in registry. Cannot run cygcheck.exe #{args}")
+      raise Puppet::Error, "Cygwin install dir not in registry. Cannot run cygcheck.exe #{args}"
     end
 
     cygcheck_cmd = File.join install_dir, 'bin', 'cygcheck.exe'
@@ -97,16 +97,14 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
     hash = {}
 
     begin
-      if match = regex.match(line)
+      if (match = regex.match(line))
         fields.zip(match.captures) { |f, v| hash[f] = v }
-        hash[:provider] = self.name
+        hash[:provider] = name
         hash[:ensure] = hash[:version]
       end
-
     rescue StandardError => e
       Puppet.debug "Failed to parse line: #{line}"
       Puppet.debug e
-
     end
 
     hash
@@ -123,7 +121,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
     packages = []
 
     cygcheck('-c', '-d').each_line do |line|
-      if hash = parse_cygcheck_line(line)
+      if (hash = parse_cygcheck_line(line))
         packages << new(hash) unless hash.empty?
       end
     end
@@ -153,21 +151,19 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
   # we'll return a simple hash that just has 'ensure' set to ':absent'
   #
   def query
-    @property_hash = { :ensure => :absent }
+    @property_hash = { ensure: :absent }
     return @property_hash if install_dir.nil?
 
     begin
-      self.class.cygcheck('-c', '-d', self.name).each_line do |line|
+      self.class.cygcheck('-c', '-d', name).each_line do |line|
         line.strip!
         next if ignore_line? line
 
         hash = self.class.parse_cygcheck_line(line)
         @property_hash = hash unless hash.empty?
       end
-
     rescue StandardError => e
       Puppet.debug e
-
     end
 
     @property_hash
@@ -183,7 +179,7 @@ Puppet::Type.type(:package).provide(:cygwin, :parent => Puppet::Provider::Packag
 
   def install
     if @resource[:name].nil?
-      fail "You must provide the name of the package to install"
+      raise 'You must provide the name of the package to install'
     end
 
     flags = ['-q', '-P', name]

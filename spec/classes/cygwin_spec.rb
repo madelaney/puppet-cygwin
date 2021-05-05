@@ -8,7 +8,7 @@ describe 'cygwin' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_class("cygwin::params") }
+      it { is_expected.to contain_class('cygwin::params') }
     end
   end
 end
