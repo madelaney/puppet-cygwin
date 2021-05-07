@@ -59,3 +59,5 @@ Rakefile:
 spec/spec_helper.rb:
   mock_with: ':rspec'
   coverage_report: true
+  spec_overrides:
+    - 'add_custom_fact :archive_windir, "C:\\ProgramData\\staging"'
