@@ -10,7 +10,7 @@
 #
 # [*host*]
 #   The Cygwin host to download Cygwin setup binary from
-
+#
 # [*mirror*]
 #   The host to set the Cygwin mirror to. This will default to where all
 #   future packages are installed from.
@@ -18,8 +18,10 @@
 # [*proxy*]
 #   The HTTP proxy (host:port) settings to use when installing packages
 #
+# [*installer*]
+#   The name of the Cygwin intaller binary
 #
-class cygwin::install(
+class cygwin::install (
   $install_root = $cygwin::install_root,
   $host         = $cygwin::host,
   $mirror       = $cygwin::mirror,
@@ -32,16 +34,16 @@ class cygwin::install(
   }
 
   $_final_url = "${host}/${installer}"
-  staging::file {
-    $installer:
-      source => $_final_url,
-      notify => Exec['Install Cygwin'];
+
+  archive { "${facts['archive_windir']}\\cygwin\\${installer}":
+    source => $_final_url,
+    notify => Exec['Install Cygwin'],
   }
 
   file {
-    "${::staging_windir}\\cygwin\\${installer}":
+    "${facts['archive_windir']}\\cygwin\\${installer}":
       mode    => '0755',
-      require => Staging::File[$installer];
+      require => Archive["${facts['archive_windir']}\\cygwin\\${installer}"],
   }
 
   $_final_command_args = $proxy ? {
@@ -52,12 +54,12 @@ class cygwin::install(
   exec {
     'Install Cygwin':
       command => "${installer} ${_final_command_args}",
-      cwd     => "${::staging_windir}\\cygwin",
-      path    => ["${::staging_windir}\\cygwin"],
+      cwd     => "${facts['archive_windir']}\\cygwin",
+      path    => ["${facts['archive_windir']}\\cygwin"],
       creates => "${install_root}\\Cygwin.bat",
       require => [
         File[$install_root],
-        File["${::staging_windir}\\cygwin\\${installer}"],
+        File["${facts['archive_windir']}\\cygwin\\${installer}"],
       ];
   }
 
@@ -68,7 +70,7 @@ class cygwin::install(
   file {
     "${install_root}\\bin\\setup.exe":
       ensure             => file,
-      source             => "${::staging_windir}\\cygwin\\${installer}",
+      source             => "file:///${facts['archive_windir']}\\cygwin\\${installer}",
       source_permissions => ignore,
       mode               => '0755',
       require            => Exec['Install Cygwin'];

@@ -2,7 +2,7 @@ require 'puppet/util/feature'
 
 # Ensure that Cygwin is installed and ready to go.
 Puppet.features.add(:cygwin) do
-  return false if ! Puppet::Util::Platform.windows?
+  return false unless Puppet::Util::Platform.windows?
 
   begin
     require 'Win32API'
@@ -22,6 +22,6 @@ Puppet.features.add(:cygwin) do
     return false
   end
 
-  Puppet::FileSystem.executable?(File.join install_dir, 'bin', 'cygcheck.exe') \
-    && Puppet::FileSystem.executable?(File.join install_dir, 'bin', 'setup.exe')
+  Puppet::FileSystem.executable?(File.join(install_dir, 'bin', 'cygcheck.exe')) \
+    && Puppet::FileSystem.executable?(File.join(install_dir, 'bin', 'setup.exe'))
 end

@@ -1,23 +1,20 @@
 {
   "name": "mdelaney-cygwin",
   "version": "0.2.0",
-  "summary": "Install Cygwin and manage packages",
   "author": "Mike Delaney",
+  "summary": "Install Cygwin and manage packages",
+  "license": "BSD-2-Clause",
   "source": "git://github.com/madelaney/puppet-cygwin",
   "project_page": "http://github.com/madelaney/puppet-cygwin",
   "issues_url": "https://github.com/madelaney/puppet-cygwin/issues",
-  "license": "BSD-2-Clause",
-  "tags": [
-    "cygwin"
-  ],
   "dependencies": [
+    {
+      "name": "puppet/archive",
+      "version_requirement": ">=2.0.0 <5.0.0"
+    },
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">=4.2.0 <6.0.0"
-    },
-    {
-      "name": "nanliu/staging",
-      "version_requirement": ">=1.0.3 <2.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -42,5 +39,11 @@
       "name": "puppet",
       "version_requirement": ">=4.1.0 <7.0.0"
     }
-  ]
+  ],
+  "tags": [
+    "cygwin"
+  ],
+  "pdk-version": "2.1.0",
+  "template-url": "pdk-default#2.1.0",
+  "template-ref": "tags/2.1.0-0-ga675ea5"
 }
